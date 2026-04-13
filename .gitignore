@@ -1,0 +1,14 @@
+# CMake 构建目录
+build/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+*.cmake
+
+# VS Code 配置文件
+.vscode/
+
+# 编译产生的临时文件和可执行文件
+*.o
+*.so
+*.a

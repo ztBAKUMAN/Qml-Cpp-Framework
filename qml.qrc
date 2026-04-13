@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/main.qml</file>
+        <file>ui/components/CyberButton.qml</file>
+        <file>ui/components/HeaderBar.qml</file>
+        <file>ui/components/TitleBar.qml</file>
+        <file>ui/components/MenuBar.qml</file>
+        <file>ui/components/StatusBar.qml</file>
+        <file>ui/components/CardPanel.qml</file>
+        <file>ui/views/SystemStatusView.qml</file>
+        <file>ui/views/VisionMonitorView.qml</file>
+        <file>ui/views/DeviceStatusView.qml</file>
+        <file>ui/views/SystemLogView.qml</file>
+        <file>ui/views/UserManageView.qml</file>
+        <file>ui/views/OtherSettingsView.qml</file>
+        <file>ui/views/VisionMonitorViewPlus.qml</file>
+        <file>ui/views/VisionMonitorViewPro.qml</file>
+        <file>ui/views/StateTest.qml</file>
+        <file>ui/views/MyPanel.qml</file>
+    </qresource>
+</RCC>
