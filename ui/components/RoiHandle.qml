@@ -1,3 +1,4 @@
+import QtQuick 2.12
 Rectangle {
     id: handleItem
     property int edgeX: 0 // -1: 左, 1: 右
