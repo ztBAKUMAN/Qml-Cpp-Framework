@@ -4,6 +4,7 @@ CMakeCache.txt
 CMakeFiles/
 Makefile
 *.cmake
+*.user
 
 # VS Code 配置文件
 .vscode/
