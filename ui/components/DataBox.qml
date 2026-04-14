@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
 Rectangle {
     property string title: ""
     property string val: ""
