@@ -13,7 +13,7 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: -5 // 扩大可操作区域，方便触摸
 
-        // 【完美修复】：必须把光标形状定义在 MouseArea 里面！
+        // 必须把光标形状定义在 MouseArea 里面！
         // 并且使用 handleItem.edgeX 明确指代外部属性
         cursorShape: {
             if (handleItem.edgeX * handleItem.edgeY > 0) return Qt.SizeBDiagCursor // 左上, 右下
@@ -21,7 +21,7 @@ Rectangle {
             return Qt.ArrowCursor
         }
 
-        onPositionChanged: (mouse) => {
+        onPositionChanged:{
             if (!pressed) return;
 
             // [数学逻辑核心]：处理边缘缩放

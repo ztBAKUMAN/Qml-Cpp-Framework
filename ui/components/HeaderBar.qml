@@ -25,7 +25,11 @@ Item {
     // 拖拽逻辑保持不变
     MouseArea {
         anchors.fill: parent
-        // 【核心修复】：双击时，直接判断原生 visibility 并调用原生方法
+
+        // 记录鼠标按下的初始坐标
+        property point clickPos: "0,0"
+
+        // 双击时，直接判断原生 visibility 并调用原生方法
         onDoubleClicked: {
             if (Window.window.visibility === Window.Maximized) {
                 Window.window.showNormal()
@@ -33,7 +37,20 @@ Item {
                 Window.window.showMaximized()
             }
         }
-        onPressed: (mouse) => { if (mouse.button === Qt.LeftButton) Window.window.startSystemMove() }
+        // 记录初始坐标点
+        onPressed: { 
+            if (mouse.button === Qt.LeftButton) {
+                clickPos = Qt.point(mouse.x, mouse.y)
+            }
+        }
+
+        // 根据鼠标位移手动更新原生窗口坐标
+        onPositionChanged: {
+            if (mouse.buttons & Qt.LeftButton) {
+                Window.window.x += (mouse.x - clickPos.x)
+                Window.window.y += (mouse.y - clickPos.y)
+            }
+        }
     }
 
     // 右上角按钮保持不变
@@ -46,10 +63,10 @@ Item {
             onClicked: Window.window.showMinimized()
         }
         Button {
-            text: Window.window.isMaximized ? "❐" : "☐"; width: 40; height: parent.height
+            text: root.isMaximized ? "❐" : "☐"; width: 40; height: parent.height
             background: Rectangle { color: parent.hovered ? "#333" : "transparent" }
             contentItem: Text { text: parent.text; color: "white"; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
-            // 【核心修复】：点击时，直接调用原生方法
+            // 点击时，直接调用原生方法
             onClicked: {
                 if (Window.window.visibility === Window.Maximized) {
                     Window.window.showNormal()
@@ -66,7 +83,7 @@ Item {
                 color: parent.hovered ? "#E81123" : "transparent"
                 radius: root.isMaximized ? 0 : 10
 
-                // 【完美修正 1：补齐整个左侧】把左上角、左下角的圆弧盖成直角
+                // 把左上角、左下角的圆弧盖成直角
                 Rectangle {
                     anchors.left: parent.left
                     anchors.top: parent.top
@@ -76,7 +93,7 @@ Item {
                     visible: !root.isMaximized // 最大化时全是直角，不需要显示补丁
                 }
 
-                // 【完美修正 2：补齐整个底部】把左下角、右下角的圆弧盖成直角
+                // 把左下角、右下角的圆弧盖成直角
                 Rectangle {
                     anchors.left: parent.left
                     anchors.right: parent.right

@@ -80,9 +80,11 @@ Item {
                         // 记录按下时的初始鼠标位置 (相对于父级)
                         property point clickPos: "0,0"
 
-                        onPressed: (mouse) => clickPos = Qt.point(mouse.x, mouse.y)
+                        onPressed: {
+                            clickPos = Qt.point(mouse.x, mouse.y)
+                        }
 
-                        onPositionChanged: (mouse) => {
+                        onPositionChanged: {
                                                if (!pressed) return;
 
                                                // 计算偏移量

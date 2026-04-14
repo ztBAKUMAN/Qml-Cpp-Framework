@@ -72,7 +72,7 @@ Window {
 
                 // 【核心架构魔法：信号捕捉与路由】
                 // 捕捉菜单发出的信号
-                onPageRequested: (pageSource) => {
+                onPageRequested: {
                                      console.log("准备切换到界面: " + pageSource)
                                      // 直接让第四层的 Loader 加载对应的 QML 文件
                                      contentLoader.source = "views/" + pageSource
