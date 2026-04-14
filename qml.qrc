@@ -7,6 +7,8 @@
         <file>ui/components/MenuBar.qml</file>
         <file>ui/components/StatusBar.qml</file>
         <file>ui/components/CardPanel.qml</file>
+        <file>ui/components/DataBox.qml</file>
+        <file>ui/components/RoiHandle.qml</file>
         <file>ui/views/SystemStatusView.qml</file>
         <file>ui/views/VisionMonitorView.qml</file>
         <file>ui/views/DeviceStatusView.qml</file>

@@ -31,6 +31,8 @@ if(QT_VERSION_MAJOR EQUAL 6)
         ui/components/MenuBar.qml
         ui/components/StatusBar.qml
         ui/components/CardPanel.qml
+        ui/components/DataBox.qml
+        ui/components/RoiHandle.qml
     )
     set(UI_VIEWS
         ui/views/SystemStatusView.qml
