@@ -19,6 +19,8 @@ set(QML_EXPORT_HEADERS
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick)
 # 找到后，动态加载对应的组件
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
+# 找到thread包
+find_package(Threads REQUIRED)
 
 message(STATUS "当前使用的 Qt 主版本为: Qt ${QT_VERSION_MAJOR}")
 
@@ -47,12 +49,6 @@ if(QT_VERSION_MAJOR EQUAL 6)
         ${UI_VIEWS}
     )
 
-    target_link_libraries(appqmlproject
-        PRIVATE
-        Qt6::Quick
-        Qt6::QuickControls2
-    )
-
 else()
 #qt5构建
     # 部分环境下AUTOMOC失效时可用
@@ -61,16 +57,21 @@ else()
     # 将 qml.qrc 加入编译列表 (确保你已经在根目录创建了该文件)
     set(QRC_SOURCES qml.qrc)
     add_executable(appqmlproject ${CPP_SOURCES} ${QRC_SOURCES} ${MOC_SOURCES})
-    
-    target_link_libraries(appqmlproject PRIVATE 
-        Qt5::Core Qt5::Gui Qt5::Qml Qt5::Quick Qt5::QuickControls2
-    )
 
 endif()
 
 # 通用配置
 target_include_directories(appqmlproject PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+)
+target_link_libraries(appqmlproject
+    PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Qml
+    Qt${QT_VERSION_MAJOR}::Quick
+    Qt${QT_VERSION_MAJOR}::QuickControls2
+    Threads::Threads   # 线程库
 )
 
 set_target_properties(appqmlproject PROPERTIES
