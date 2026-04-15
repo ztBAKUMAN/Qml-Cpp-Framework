@@ -17,7 +17,7 @@ Rectangle {
         color: "gray" // 初始默认颜色
 
         // 假设这是我们的 C++ 后端控制器
-        DeviceController { id: backend }
+        DeviceControllor { id: backend }
 
         Text {
             id: statusText
@@ -35,27 +35,27 @@ Rectangle {
             State {
                 name: "OfflineState"
                 // 神奇的 when 关键字：只要 C++ 的枚举等于这个值，QML 自动无缝切入此状态
-                when: backend.status === DeviceController.Offline
+                when: backend.status === DeviceControllor.Offline
                 // PropertyChanges 负责声明在这个状态下，UI 应该长什么样
                 PropertyChanges { target: motorIndicator; color: "#6C757D"; scale: 1.0 }
                 PropertyChanges { target: statusText; text: "设备离线" }
             },
             State {
                 name: "IdleState"
-                when: backend.status === DeviceController.Idle
+                when: backend.status === DeviceControllor.Idle
                 PropertyChanges { target: motorIndicator; color: "#0078D7"; scale: 1.0 }
                 PropertyChanges { target: statusText; text: "待机中" }
             },
             State {
                 name: "RunningState"
-                when: backend.status === DeviceController.Running
+                when: backend.status === DeviceControllor.Running
                 // 运行状态下，稍微放大一点点视觉体积
                 PropertyChanges { target: motorIndicator; color: "#28A745"; scale: 1.1 }
                 PropertyChanges { target: statusText; text: "运行中" }
             },
             State {
                 name: "FaultState"
-                when: backend.status === DeviceController.Fault
+                when: backend.status === DeviceControllor.Fault
                 PropertyChanges { target: motorIndicator; color: "#DC3545"; scale: 1.0 }
                 PropertyChanges { target: statusText; text: "系统故障!" }
             }
@@ -86,10 +86,10 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                if (backend.status === DeviceController.Offline) backend.status = DeviceController.Idle
-                else if (backend.status === DeviceController.Idle) backend.status = DeviceController.Running
-                else if (backend.status === DeviceController.Running) backend.status = DeviceController.Fault
-                else backend.status = DeviceController.Offline
+                if (backend.status === DeviceControllor.Offline) backend.status = DeviceControllor.Idle
+                else if (backend.status === DeviceControllor.Idle) backend.status = DeviceControllor.Running
+                else if (backend.status === DeviceControllor.Running) backend.status = DeviceControllor.Fault
+                else backend.status = DeviceControllor.Offline
             }
         }
     }

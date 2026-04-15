@@ -4,6 +4,8 @@ project(qmldemo VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# 生成 compile_commands.json 供 clangd 使用
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # 先尝试找 Qt6，找不到再找 Qt5
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick)
@@ -12,40 +14,18 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Qml Quick QuickC
 
 message(STATUS "当前使用的 Qt 主版本为: Qt ${QT_VERSION_MAJOR}")
 
-set(CPP_SOURCES
-    src/main.cpp
-    src/DeviceControllor.cpp
-)
-set(INCLUDE_FILES
-    src/include/DeviceControllor.h
-)
+# 收集 src 下的所有 cpp 文件
+file(GLOB CPP_SOURCES "src/*.cpp")
+# 使用 GLOB 自动匹配所有 .qml 文件
+file(GLOB UI_COMPONENTS "ui/components/*.qml")
+file(GLOB UI_VIEWS "ui/views/*.qml")
+# 匹配js脚本文件
+file(GLOB JS_FILES "ui/scripts/*.js")
 
 if(QT_VERSION_MAJOR EQUAL 6)
 #qt6构建
-    qt_add_executable(appqmldemo ${CPP_SOURCES} ${INCLUDE_FILES})
+    qt_add_executable(appqmldemo ${CPP_SOURCES})
 
-    set(UI_COMPONENTS
-        ui/components/CyberButton.qml
-        ui/components/HeaderBar.qml
-        ui/components/TitleBar.qml
-        ui/components/MenuBar.qml
-        ui/components/StatusBar.qml
-        ui/components/CardPanel.qml
-        ui/components/DataBox.qml
-        ui/components/RoiHandle.qml
-    )
-    set(UI_VIEWS
-        ui/views/SystemStatusView.qml
-        ui/views/VisionMonitorView.qml
-        ui/views/DeviceStatusView.qml
-        ui/views/SystemLogView.qml
-        ui/views/UserManageView.qml
-        ui/views/OtherSettingsView.qml
-        ui/views/VisionMonitorViewPlus.qml
-        ui/views/VisionMonitorViewPro.qml
-        ui/views/StateTest.qml
-        ui/views/MyPanel.qml
-    )
     qt_add_qml_module(appqmldemo
         URI qmldemo
         VERSION 1.0
@@ -67,7 +47,7 @@ else()
     set(CMAKE_AUTORCC ON) # 开启 QRC 自动编译
     # 将 qml.qrc 加入编译列表 (确保你已经在根目录创建了该文件)
     set(QRC_SOURCES qml.qrc)
-    add_executable(appqmldemo ${CPP_SOURCES} ${INCLUDE_FILES} ${QRC_SOURCES})
+    add_executable(appqmldemo ${CPP_SOURCES} ${QRC_SOURCES})
     
     target_link_libraries(appqmldemo PRIVATE 
         Qt5::Core Qt5::Gui Qt5::Qml Qt5::Quick Qt5::QuickControls2

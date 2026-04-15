@@ -6,6 +6,10 @@ Makefile
 *.cmake
 *.user
 
+# clangd 配置文件
+.clangd/
+*.json
+
 # VS Code 配置文件
 .vscode/
 

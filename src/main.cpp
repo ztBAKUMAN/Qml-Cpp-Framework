@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // Qt5 手动注册
-    // 这样你在 QML 里就可以直接 import qmldemo 1.0 然后使用 DeviceController {} 实例化了
-    qmlRegisterType<DeviceController>("qmldemo", 1, 0, "DeviceController");
+    // 这样你在 QML 里就可以直接 import qmldemo 1.0 然后使用 DeviceControllor {} 实例化了
+    // qmlRegisterType<DeviceControllor>("qmldemo", 1, 0, "DeviceControllor");
     // 注意路径：我们将通过传统的 qrc 文件来管理资源
     const QUrl url(QStringLiteral("qrc:/ui/main.qml"));
 #else

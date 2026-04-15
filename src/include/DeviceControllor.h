@@ -1,5 +1,5 @@
-#ifndef DEVICECONTROLLER_H
-#define DEVICECONTROLLER_H
+#ifndef DEVICECONTROLLOR_H
+#define DEVICECONTROLLOR_H
 
 #include <QObject>
 #include <QtGlobal> // 必须引入以获取版本宏
@@ -9,7 +9,7 @@
     #include <QtQml/qqmlregistration.h>
 #endif
 
-class DeviceController : public QObject {
+class DeviceControllor : public QObject {
     Q_OBJECT
 // 仅在 Qt6 环境下启用自动化注册宏
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -31,7 +31,7 @@ public:
     Q_PROPERTY(DeviceStatus status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
-    explicit DeviceController(QObject *parent = nullptr) : QObject(parent), m_status(DeviceStatus::Idle) {}
+    explicit DeviceControllor(QObject *parent = nullptr) : QObject(parent), m_status(DeviceStatus::Idle) {}
 
     DeviceStatus status() const { return m_status; }
     void setStatus(DeviceStatus newStatus) {
