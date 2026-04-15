@@ -31,14 +31,11 @@ public:
     Q_PROPERTY(DeviceStatus status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
-    explicit DeviceControllor(QObject *parent = nullptr) : QObject(parent), m_status(DeviceStatus::Idle) {}
+    explicit DeviceControllor(QObject *parent = nullptr);
+    ~DeviceControllor();
 
-    DeviceStatus status() const { return m_status; }
-    void setStatus(DeviceStatus newStatus) {
-        if (m_status == newStatus) return;
-        m_status = newStatus;
-        emit statusChanged();
-    }
+    inline DeviceStatus status() const { return m_status; }
+    void setStatus(DeviceStatus newStatus);
 
 signals:
     void statusChanged();

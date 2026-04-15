@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import qmldemo 1.0 // 引入我们之前写的 C++ 模块
+import cppmodule.DeviceControllor 1.0 // 引入我们之前写的 C++ 模块
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
