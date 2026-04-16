@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import cppmodule.DeviceControllor 1.0 // 引入我们之前写的 C++ 模块
+import cppmodule.DeviceControllor 1.0 // 引入 C++ 模块
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
@@ -14,9 +14,9 @@ Rectangle {
         id: motorIndicator
         width: 200; height: 200
         radius: 100
-        color: "gray" // 初始默认颜色
+        color: "gray"
 
-        // 假设这是我们的 C++ 后端控制器
+        // C++ 控制器
         DeviceControllor { id: backend }
 
         Text {
@@ -28,13 +28,10 @@ Rectangle {
             font.bold: true
         }
 
-        // ==========================================
-        // 核心灵感 1：定义状态 (States)
-        // ==========================================
         states: [
             State {
                 name: "OfflineState"
-                // 神奇的 when 关键字：只要 C++ 的枚举等于这个值，QML 自动无缝切入此状态
+                // 只要 C++ 的枚举等于这个值，QML 自动无缝切入此状态
                 when: backend.status === DeviceControllor.Offline
                 // PropertyChanges 负责声明在这个状态下，UI 应该长什么样
                 PropertyChanges { target: motorIndicator; color: "#6C757D"; scale: 1.0 }
@@ -61,9 +58,6 @@ Rectangle {
             }
         ]
 
-        // ==========================================
-        // 核心灵感 2：定义过渡动画 (Transitions)
-        // ==========================================
         transitions: [
             Transition {
                 // from: "*" 到 to: "*" 表示任意两个状态之间的切换，都使用下面这套动画

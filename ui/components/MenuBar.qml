@@ -7,10 +7,9 @@ Rectangle {
     id: root
     color: mainWindow.theme.subPanel
 
-    // 发射带有目标 QML 文件名的信号
+    // 发射带有目标 QML 文件名的信号，让主窗口加载对应的页面
     signal pageRequested(string pageSource)
-
-    // 【核心知识点：ListModel 数据模型】
+s
     // 这里维护按钮的名称和对应的 QML 文件路径。未来想加多少个按钮，直接往这里添就行。
     ListModel {
         id: menuModel
@@ -21,14 +20,13 @@ Rectangle {
         ListElement { btnName: "用户管理"; pageFile: "UserManageView.qml" }
         ListElement { btnName: "其他设置"; pageFile: "OtherSettingsView.qml" }
 
-        // 【新增】：复制几个凑数的，强行让总宽度超过窗口
         ListElement { btnName: "扩展模块A"; pageFile: "StateTest.qml" }
         ListElement { btnName: "扩展模块B"; pageFile: "MyPanel.qml" }
         ListElement { btnName: "扩展模块C"; pageFile: "SystemStatusView.qml" }
         ListElement { btnName: "扩展模块D"; pageFile: "SystemStatusView.qml" }
     }
 
-    // 【核心知识点：ListView 触摸滑动列表】
+    // 滑动列表
     ListView {
         id: menuList
         anchors.fill: parent

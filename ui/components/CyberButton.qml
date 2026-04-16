@@ -1,20 +1,18 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 
-// 【知识点：自定义组件】
-// 最外层用 Item 作为一个透明的容器，方便我们在外部控制它的大小
+// 自定义组件可用 Item 作为一个透明的容器，方便我们在外部控制它的大小
 Item {
-    id: root // 【知识点：id】给这个组件起个唯一名字，方便内部互相调用
+    id: root
 
-    // 【知识点：暴露自定义属性】
-    // 定义外部可以修改的属性，这样在主界面调用时就可以随便改文字和颜色了
+    // 暴露自定义属性
     property string text: "默认按钮"
-    property color themeColor: "#00E5FF" // 默认荧光青色
+    property color themeColor: "#00E5FF"
 
     // 内部实际显示的矩形按钮
     Rectangle {
         id: bgRect
-        anchors.fill: parent // 【知识点：锚点】填满整个根 Item
+        anchors.fill: parent
         color: "#1A1A24"
         border.color: root.themeColor
         border.width: 1
@@ -30,7 +28,7 @@ Item {
             anchors.centerIn: parent
         }
 
-        // 【知识点：MouseArea 触摸/鼠标交互核心】
+        // 鼠标交互区域
         MouseArea {
             id: mouseArea
             anchors.fill: parent
@@ -40,8 +38,7 @@ Item {
             onClicked: console.log("按钮被点击了: " + root.text)
         }
 
-        // 【知识点：状态机 States】
-        // 游戏级 UI 的核心！定义按钮在不同交互下的“视觉状态”
+        // 定义按钮在不同交互下的“视觉状态”
         states: [
             State {
                 name: "hovered"
@@ -61,8 +58,7 @@ Item {
             }
         ]
 
-        // 【知识点：过渡动画 Transitions】
-        // 告诉引擎，当状态发生切换时，不要生硬地突变，而是用动画平滑过渡
+        // 过渡动画
         transitions: Transition {
             // NumberAnimation 专门用来让数字（比如缩放比例、边框粗细）产生丝滑变化
             NumberAnimation { properties: "scale, border.width"; duration: 150; easing.type: Easing.OutQuad }

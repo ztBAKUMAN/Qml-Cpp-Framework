@@ -12,8 +12,7 @@ Window {
     //    color: "#0D0D12"
     color: "transparent"
 
-    // 【核心修复】：删除原来的 property bool isMaximized: false
-    // 换成下面这句！这叫“派生属性绑定”，只要窗口 visibility 变了，它自动变 true/false
+    // 窗口最大化属性
     readonly property bool isMaximized: mainWindow.visibility === Window.Maximized
 
     // 定义一个布尔值来记录当前模式
@@ -38,6 +37,7 @@ Window {
 
     }
 
+    // 大背景
     Rectangle {
         id: rootBg
         anchors.fill: parent
@@ -51,35 +51,34 @@ Window {
             anchors.fill: parent
             spacing: 0
 
-            // 1. 呼叫头部层
+            // 窗头
             HeaderBar {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
                 isMaximized: mainWindow.isMaximized
             }
 
-            // 2. 呼叫标题层，并赋予具体文字
+            // 标题栏
             TitleBar {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
                 titleText: "RK3588 边缘视觉控制中枢"
             }
 
-            // 3. 呼叫菜单层，并监听它的信号
+            // 菜单栏
             MenuBar {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 60
 
-                // 【核心架构魔法：信号捕捉与路由】
-                // 捕捉菜单发出的信号
+                // 捕捉切换界面信号
                 onPageRequested: {
                                      console.log("准备切换到界面: " + pageSource)
-                                     // 直接让第四层的 Loader 加载对应的 QML 文件
+                                     // 直接让 Loader 加载对应的 QML 文件
                                      contentLoader.source = "views/" + pageSource
                                  }
             }
 
-            // 4. 内容层 (直接内嵌 Loader 即可)
+            // 界面内容
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -94,14 +93,13 @@ Window {
                 }
             }
 
-            // 5. 呼叫状态层
+            // 底部状态栏
             StatusBar {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 30
                 isMaximized: mainWindow.isMaximized
-                statusMessage: "通信模块已启动 | OpenCV 引擎待命中"
+                statusMessage: "通信模块已启动"
             }
         }
-
     }
 }

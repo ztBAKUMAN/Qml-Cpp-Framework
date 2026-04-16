@@ -12,19 +12,15 @@ Item {
         anchors.fill: parent
         spacing: 20
 
-        // ==========================================================
-        // 左侧：OpenCV 视觉画面渲染区 (自适应拉伸占满剩余空间)
-        // ==========================================================
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: mainWindow.isDarkTheme ? "#050508" : "#E5E5EA" // 比主面板更深的纯净底色
+            color: mainWindow.isDarkTheme ? "#050508" : "#E5E5EA"
             border.color: mainWindow.theme.border
             border.width: 1
             radius: 8
             clip: true
 
-            // 1. 画面占位提示文本
             Text {
                 text: "CAMERA 01 - 实时视频流\n(等待 C++ OpenCV 图像帧接入...)"
                 color: mainWindow.theme.textSub
@@ -34,7 +30,7 @@ Item {
                 opacity: 0.5
             }
 
-            // 2. 模拟 AI 科技感网格线 (仅装饰)
+            // 网格线
             Grid {
                 anchors.fill: parent
                 rows: 10; columns: 10
@@ -49,7 +45,7 @@ Item {
                 }
             }
 
-            // 3. 模拟动态 AI 缺陷捕获框 (呼吸闪烁效果)
+            // 动态捕获框
             Rectangle {
                 x: parent.width * 0.3; y: parent.height * 0.4 // 随便放个位置
                 width: 180; height: 120
@@ -87,9 +83,7 @@ Item {
             }
         }
 
-        // ==========================================================
-        // 右侧：数据看板与日志区 (固定宽度 360)
-        // ==========================================================
+        // 滚动日志
         Rectangle {
             Layout.preferredWidth: 360
             Layout.fillHeight: true
@@ -103,7 +97,6 @@ Item {
                 anchors.margins: 15
                 spacing: 15
 
-                // --- 模块 1：核心状态网格 (GridLayout) ---
                 Text { text: "实时检测参数"; color: mainWindow.theme.textMain; font.pixelSize: 18; font.bold: true }
 
                 GridLayout {
@@ -121,7 +114,6 @@ Item {
                 // 分割线
                 Rectangle { Layout.fillWidth: true; height: 1; color: mainWindow.theme.border }
 
-                // --- 模块 2：实时缺陷抓拍流 (ListView) ---
                 Text { text: "近期缺陷抓拍 (最大保留 20 条)"; color: mainWindow.theme.textMain; font.pixelSize: 18; font.bold: true }
 
                 // 初始的日志数据模型
@@ -139,12 +131,11 @@ Item {
                     spacing: 8
                     clip: true
 
-                    // 【核心逻辑 1：悬浮侦测幽灵】
                     HoverHandler {
                         id: listHover
                     }
 
-                    // 【核心逻辑 2：自定义渐变滚动条】
+                    // 自定义滚动条
                     ScrollBar.vertical: ScrollBar {
                         id: vScrollBar
                         // 显隐逻辑：鼠标悬浮在列表上，或者正按着滚动条拖拽时，显示；否则隐藏
@@ -162,13 +153,11 @@ Item {
                         }
                     }
 
-                    // 【修复报错 2：使用 Qt6 标准的 Transition 属性来处理入场动画】
-                    // 把它写在 ListView 层级，而不是 delegate 层级
                     add: Transition {
                         NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 300 }
                     }
 
-                    // 【核心逻辑 3：模拟后端实时推送的定时器】
+                    // 模拟定时器
                     Timer {
                         interval: 1500 // 每 1.5 秒来一条新报警
                         running: true
@@ -181,11 +170,10 @@ Item {
                             let randLevel = levels[Math.floor(Math.random() * levels.length)]
                             let timeStr = Qt.formatTime(new Date(), "hh:mm:ss")
 
-                            // 关键点 A：插入到最顶部 (index: 0)，而不是追加到底部。
-                            // 这样操作员永远第一眼看到最新的报警，不需要手动往下拉。
+                            // 插入最顶部
                             logModel.insert(0, { time: timeStr, type: randType, level: randLevel })
 
-                            // 关键点 B：内存保护机制。如果超过 20 条，删掉最底下那条老数据。
+                            // 超过 20 条，删掉最底下那条老数据
                             if (logModel.count > 20) {
                                 logModel.remove(20, 1)
                             }

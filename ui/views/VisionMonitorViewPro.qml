@@ -15,9 +15,6 @@ Item {
         anchors.fill: parent
         spacing: (root.drawerWidth / 360) * 20
 
-        // ==========================================================
-        // 左侧：OpenCV 视觉画面渲染区 (在这里实装 ROI 功能)
-        // ==========================================================
         Rectangle {
             id: videoPlaceholder
             Layout.fillWidth: true
@@ -26,7 +23,7 @@ Item {
             border.color: mainWindow.theme.border
             border.width: 1
             radius: 8
-            // [极其重要]：必须开启裁剪，保证内部元素不溢出
+            // 开启裁剪，保证内部元素不溢出
             clip: true
 
             Text {
@@ -34,14 +31,10 @@ Item {
                 color: mainWindow.theme.textSub; font.pixelSize: 20; horizontalAlignment: Text.AlignHCenter; anchors.centerIn: parent; opacity: 0.3
             }
 
-            // 网格背景保持不变
+            // 网格背景
             Grid { anchors.fill: parent; rows: 10; columns: 10; Repeater { model: 100; Rectangle { width: parent.width/10; height: parent.height/10; color: "transparent"; border.color: mainWindow.theme.accent; opacity: 0.05 } } }
 
-            // ==========================================================
-            // 【核心实装：鼠标自由拖拽缩放的 ROI 选择框】
-            // ==========================================================
-
-            // [逻辑层]：用一个普通的 Item 作为 ROI 数据的根
+            // 用一个普通的 Item 作为 ROI 数据的根
             Item {
                 id: roiHandler
                 // 给个默认位置和大小 (比如居中，占画面 30%)
@@ -54,7 +47,7 @@ Item {
                 property real minW: 50
                 property real minH: 50
 
-                // [视觉层]：展示 ROI 的外观
+                // 展示 ROI 的外观
                 Rectangle {
                     id: roiRect
                     anchors.fill: parent
@@ -70,7 +63,7 @@ Item {
                         id: handlerHover
                     }
 
-                    // --- 逻辑：处理 ROI 主体的拖拽移动 ---
+                    // 处理 ROI 主体的拖拽移动
                     MouseArea {
                         id: mouseAreaBody
                         anchors.fill: parent
@@ -95,16 +88,13 @@ Item {
                                                let nextX = roiHandler.x + deltaX
                                                let nextY = roiHandler.y + deltaY
 
-                                               // [逻辑核心]：应用边界限制！(x: 0 ~ 画面宽-自己宽)
+                                               // 应用边界限制(x: 0 ~ 画面宽-自己宽)
                                                roiHandler.x = Math.max(0, Math.min(nextX, videoPlaceholder.width - roiHandler.width))
                                                roiHandler.y = Math.max(0, Math.min(nextY, videoPlaceholder.height - roiHandler.height))
                                            }
                     }
                 }
 
-                // --- [逻辑层]：封装一个把手组件，用于在 4 个角上复用 ---
-
-                // --- [视觉层]：实例化四个角落把手 ---
                 // 左上
                 RoiHandle { anchors.centerIn: parent.topLeft; edgeX: -1; edgeY: -1 }
                 // 右上
@@ -116,9 +106,6 @@ Item {
             }
         }
 
-        // ==========================================================
-        // 右侧：隐藏式数据抽屉层 (在此显示 ROI 数据反馈)
-        // ==========================================================
         Item {
             Layout.preferredWidth: root.drawerWidth; Layout.fillHeight: true; clip: true
             Rectangle {
@@ -128,7 +115,6 @@ Item {
                 ColumnLayout {
                     anchors.fill: parent; anchors.margins: 15; spacing: 15
 
-                    // --- 模块 1：核心状态网格 (在此显示 ROI 精准数据) ---
                     Text { text: "ROI 参数反馈"; color: mainWindow.theme.textMain; font.pixelSize: 18; font.bold: true }
 
                     GridLayout {
@@ -143,7 +129,6 @@ Item {
 
                     Rectangle { Layout.fillWidth: true; height: 1; color: mainWindow.theme.border }
 
-                    // 下方日志保持不变
                     Text { text: "近期缺陷抓拍"; color: mainWindow.theme.textMain; font.pixelSize: 18; font.bold: true }
                     ListModel { id: logModel }
                     ListView { id: logListView; Layout.fillWidth: true; Layout.fillHeight: true; model: logModel; spacing: 8; clip: true; HoverHandler { id: listHover } ScrollBar.vertical: ScrollBar { opacity: listHover.hovered || pressed ? 1.0 : 0.0; Behavior on opacity { NumberAnimation { duration: 300 } } } add: Transition { NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 300 } } Timer { interval: 1500; running: true; repeat: true; onTriggered: { let types = ["表面划痕", "边缘缺角"]; let levels = ["严重"]; logModel.insert(0, { time: Qt.formatTime(new Date(), "hh:mm:ss"), type: types[Math.floor(Math.random()*types.length)], level: levels[Math.floor(Math.random()*levels.length)] }); if (logModel.count > 50) logModel.remove(50, 1) } } delegate: Rectangle { width: logListView.width; height: 60; color: mainWindow.theme.subPanel; radius: 4; border.color: "#55FF3333"; border.width: model.level === "严重" ? 1 : 0; RowLayout { anchors.fill: parent; anchors.margins: 10; Rectangle { width: 40; height: 40; color: "#333"; radius: 4 }
@@ -158,6 +143,5 @@ Item {
         }
     }
 
-    // 悬浮触发器保持不变
     Item { width: 30; height: 100; anchors.verticalCenter: parent.verticalCenter; anchors.right: parent.right; anchors.rightMargin: root.drawerWidth; HoverHandler { id: triggerHover } Rectangle { anchors.fill: parent; color: mainWindow.theme.accent; opacity: triggerHover.hovered ? 0.9 : 0.0; Behavior on opacity { NumberAnimation { duration: 300 } } radius: 8; Rectangle { width: 8; height: parent.height; anchors.right: parent.right; color: parent.color } Text { text: root.isDrawerOpen ? "▶" : "◀"; color: "white"; font.bold: true; font.pixelSize: 16; anchors.centerIn: parent } } MouseArea { anchors.fill: parent; onClicked: { root.isDrawerOpen = !root.isDrawerOpen } } }
 }

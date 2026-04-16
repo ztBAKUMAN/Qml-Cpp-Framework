@@ -15,14 +15,14 @@ Item {
         radius: root.isMaximized ? 0 : 10 // 顶部圆角
     }
 
-    // 【核心魔法：补齐下半部分】用一个没有圆角的矩形，盖住下半部分，实现“仅顶部圆角”
+    // 用一个没有圆角的矩形，盖住下半部分，实现“仅顶部圆角”
     Rectangle {
         anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom
         height: root.isMaximized ? parent.height : 10
         color: "#15151C"
     }
 
-    // 拖拽逻辑保持不变
+    // 拖拽
     MouseArea {
         anchors.fill: parent
 
@@ -89,8 +89,8 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     width: parent.radius
-                    color: parent.color // 直接跟随外层 Rectangle 的颜色，极其优雅
-                    visible: !root.isMaximized // 最大化时全是直角，不需要显示补丁
+                    color: parent.color
+                    visible: !root.isMaximized
                 }
 
                 // 把左下角、右下角的圆弧盖成直角

@@ -5,10 +5,8 @@ import QtQuick.Layouts 1.12
 Item {
     id: root
     anchors.fill: parent
-
-    // 【核心逻辑 1：抽屉状态与宽度计算】
+    // 右侧抽屉属性
     property bool isDrawerOpen: true
-    // 当抽屉打开时宽度 360，关闭时宽度 0
     property real drawerWidth: isDrawerOpen ? 360 : 0
 
     // 使用 Behavior 监听 drawerWidth 的变化，只要它变了，就自动用动画过渡！
@@ -18,12 +16,9 @@ Item {
 
     RowLayout {
         anchors.fill: parent
-        // 【细节】：间距也跟随宽度等比例缩小，保证合上时严丝合缝
+        // 间距也跟随宽度等比例缩小，保证合上时严丝合缝
         spacing: (root.drawerWidth / 360) * 20
 
-        // ==========================================================
-        // 左侧：OpenCV 视觉画面渲染区
-        // ==========================================================
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -39,23 +34,19 @@ Item {
                 font.pixelSize: 24; horizontalAlignment: Text.AlignHCenter; anchors.centerIn: parent; opacity: 0.5
             }
 
-            // 简单的网格背景占位
+            // 网格背景
             Grid { anchors.fill: parent; rows: 10; columns: 10; Repeater { model: 100; Rectangle { width: parent.width/10; height: parent.height/10; color: "transparent"; border.color: mainWindow.theme.accent; opacity: 0.05 } } }
         }
 
-        // ==========================================================
-        // 右侧：隐藏式数据抽屉层
-        // ==========================================================
         Item {
             // 这个 Item 就是抽屉的“导轨”，它的宽度会从 360 动画缩小到 0
             Layout.preferredWidth: root.drawerWidth
             Layout.fillHeight: true
-            // 【核心逻辑 2：裁剪遮罩】极其重要！宽度归零时，把超出的内容直接一刀切掉
+            // 宽度归零时，把超出的内容直接一刀切掉
             clip: true
 
             // 这是真正的抽屉实体
             Rectangle {
-                // 【核心逻辑 3：防挤压魔法】
                 // 实体宽度永远锁死在 360，不会因为导轨变窄而被挤压变形
                 width: 360
                 anchors.top: parent.top
@@ -68,7 +59,6 @@ Item {
                 border.width: 1
                 radius: 8
 
-                // --- 下面全是原来的数据逻辑，一字未改 ---
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 15
@@ -133,15 +123,12 @@ Item {
         }
     }
 
-    // ==========================================================
-    // 悬浮触发器：永远贴在抽屉左侧的“窄边按钮”
-    // ==========================================================
+    // 悬浮按钮,用于打开/关闭抽屉
     Item {
         width: 30
         height: 100
         anchors.verticalCenter: parent.verticalCenter
-        // 让按钮永远锚定在父级右侧，但向左偏移出抽屉的宽度！
-        // 这样抽屉收进去时，它刚好贴在屏幕最右侧；抽屉拉出来时，它贴在抽屉左侧。
+        // 让按钮永远锚定在父级右侧，但向左偏移出抽屉的宽度
         anchors.right: parent.right
         anchors.rightMargin: root.drawerWidth
 
